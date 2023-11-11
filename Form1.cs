@@ -30,7 +30,6 @@ namespace ErnetYonetim
             dataGridView1.DataSource = tabloList;
             baglan.Close();
         }
-
         private void button2_Click(object sender, EventArgs e)
         {
             verileriGoruntule();
@@ -39,9 +38,17 @@ namespace ErnetYonetim
         private void button1_Click(object sender, EventArgs e)
         {
             baglan.Open();
-            SqlCommand komut = new SqlCommand("insert into Works (AracPlaka,AracSofor,CıkısNoktası,TeslimatNoktası,Tarih) values ('" + textBox1.Text.ToString() + "','" + textBox2.Text.ToString() + "','" + textBox3.Text.ToString() + "','" + textBox4.Text.ToString() + "','" + dateTimePicker1.Value.ToShortDateString() + "')", baglan);
-            komut.ExecuteNonQuery();
-            baglan.Close();
+            using (SqlCommand komut = new SqlCommand("INSERT INTO Works (AracPlaka, AracSofor, CıkısNoktası, TeslimatNoktası, Tarih) VALUES (@AracPlaka, @AracSofor, @CikisNoktasi, @TeslimatNoktasi, @Tarih)", baglan))
+            {
+                komut.Parameters.AddWithValue("@AracPlaka", textBox1.Text);
+                komut.Parameters.AddWithValue("@AracSofor", textBox2.Text);
+                komut.Parameters.AddWithValue("@CikisNoktasi", textBox3.Text);
+                komut.Parameters.AddWithValue("@TeslimatNoktasi", textBox4.Text);
+                komut.Parameters.AddWithValue("@Tarih", dateTimePicker1.Value);
+
+                komut.ExecuteNonQuery();
+            }
+            baglan.Close() ;
             verileriGoruntule();
             textBox1.Clear();
             textBox2.Clear();
@@ -58,16 +65,6 @@ namespace ErnetYonetim
             verileriGoruntule();
         }
 
-        private void tabPage1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
+
 }
